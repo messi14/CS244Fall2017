@@ -6,7 +6,7 @@ String deviceName = "CS244";
 // WiFi settings
 const char *ssid = "UCInet Mobile Access";
 
-String serverEndPoint = "http://ec2-52-39-105-140.us-west-2.compute.amazonaws.com/test.php";
+String serverEndPoint = "http://ec2-52-39-105-140.us-west-2.compute.amazonaws.com/test2.php";
 HTTPClient http;    //Declare object of class HTTPClient
 void printMacAddress()
 {
@@ -49,14 +49,11 @@ void loop()
         String request = "temperature=70&humidity=33&heartRate=72";
         int httpCode = http.POST(request);   //Send the request
         String response = http.getString();      //Get the response payload
-
-        Serial.println("Response code : " + httpCode);   //Print HTTP return code
         Serial.println("Response : " + response);    //Print request response payload
-
         http.end();  //Close connection
     } else {
         Serial.println("Error in WiFi connection");
     }
-    delay(60*60*1000); // delay of 1 min
+    delay(600*1000); // delay of 1 min
 
 }
