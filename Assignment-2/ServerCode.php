@@ -1,11 +1,11 @@
 <?php
 
 #Getting post data sent from the client
-$temperature = $_POST["red"];
-$humidity = $_POST["IR"];
+$red = $_POST["red"];
+$ir = $_POST["IR"];
 
 #forming a string to write to the file
-$temp = $temperature.", ".$humidity."\n";
+$temp = $red.", ".$ir."\n";
 
 #file path where data is to be written
 $file = 'data3.txt';
