@@ -14,9 +14,6 @@ HTTPClient http;    //Declare object of class HTTPClient
 MAX30105 particleSensor;
 long samplesTaken = 0;
 
-//#define debug Serial //Uncomment this line if you're using an Uno or ESP
-//#define debug SerialUSB //Uncomment this line if you're using a SAMD21
-
 void printMacAddress()
 {
     byte mac[6];
@@ -85,6 +82,8 @@ void loop()
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         uint32_t red = particleSensor.getRed();
         uint32_t IR = particleSensor.getIR();
+        
+        //Debug Code
         // Serial.print(" R[");
         // Serial.print(red);
         // Serial.print("] IR[");
