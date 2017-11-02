@@ -229,9 +229,9 @@ for i in range(0, len(IR_AC_val)):
     ratio_avg_list.append(ratioAverage)
     
 SPO2_values = [calSPO2(ratio_avg) for ratio_avg in ratio_avg_list]
+## Calculate the average SPO2 values  
 calAvgSPO2(ratio_avg_list)
 
 for val in SPO2_values:
     print("%.3f" %val) #Round off to 2 decimal and print
-## Calculate the average SPO2 values  
 
