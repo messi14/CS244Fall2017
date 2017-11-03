@@ -14,6 +14,8 @@ HTTPClient http;    //Declare object of class HTTPClient
 MAX30105 particleSensor;
 long samplesTaken = 0;
 
+vector<String> jsonReadings;
+
 void printMacAddress()
 {
     byte mac[6];
@@ -70,37 +72,64 @@ void setup()
     particleSensor.setPulseAmplitudeIR(0xFF);
 }
 
+String combineJson() {
+
+    String jsonArray = "";
+    for(int i = 0; i<jsonReadings.size() ; i++){
+        
+        jsonArray+=jsonReadings[i];
+        if(i == jsonReadings.size()-1) {
+
+            continue;
+        }
+        
+        jsonArray+= ",";
+
+    }
+    String result = "{\"data\":[";
+    result+=jsonArray;
+    result+="]}";
+    return result;
+
+}
+
+String formJson(float r, float ir){
+
+    String result = "{\"Red\":";
+    result += r;
+    result += ",";
+
+    result += "\"IR\":";
+    result += ir;
+    
+    result += "}";
+
+    Serial.println(result);
+    jsonReadings.push_back(result);
+}
+
+
 void loop()
 {
     if (WiFi.status() == WL_CONNECTED) {
-      if(samplesTaken == (long)50*120) {
+      if(samplesTaken == 50*12) {
         Serial.println("Done ");
-            return;
-          }
-          samplesTaken++;
         http.begin(serverEndPoint);  //Specify request destination
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        uint32_t red = particleSensor.getRed();
-        uint32_t IR = particleSensor.getIR();
-        
-        //Debug Code
-        // Serial.print(" R[");
-        // Serial.print(red);
-        // Serial.print("] IR[");
-        // Serial.print(IR);
-        // Serial.print("]");
-        // Serial.println();
-
-        String request = "red=";
-        request += red;
-        request +=  "&IR=";
-        request += IR;
+        String request = combineJson();
         int httpCode = http.POST(request);   //Send the request
         //String response = http.getString();      //Get the response payload
         //Serial.println("Response : " + response);    //Print request response payload
         http.end();  //Close connection
-      
-      } else {
+        samplesTaken=0;
+        return;
+        }
+        samplesTaken++;
+        
+        uint32_t Red = particleSensor.getRed();
+        uint32_t IR = particleSensor.getIR();
+        formJson(Red, IR);
+        } else {
         Serial.println("Error in WiFi connection");
     }
 
