@@ -30,7 +30,7 @@ void printMacAddress()
     Serial.print("Mac address : ");
     Serial.print(MAC_char);
 
-    WiFi.begin(ssid,"ajrocks@123");
+    WiFi.begin(ssid,"******");
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
@@ -112,7 +112,7 @@ String formJson(float r, float ir){
 void loop()
 {
     if (WiFi.status() == WL_CONNECTED) {
-      if(samplesTaken == 50*12) {
+      if(samplesTaken == 100) {
         Serial.println("Done ");
         http.begin(serverEndPoint);  //Specify request destination
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
