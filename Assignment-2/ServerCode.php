@@ -1,18 +1,22 @@
 <?php
 
-#Getting post data sent from the client
-$red = $_POST["red"];
-$ir = $_POST["IR"];
-
 #forming a string to write to the file
-$temp = $red.", ".$ir."\n";
+$data = json_decode(file_get_contents('php://input'), true);
+$data = $data["data"];
+print_r($data);
 
 #file path where data is to be written
-$file = 'data3.txt';
+$file = ‘RED_IR_data.txt';
 
 #open a file and write the string data to it
 if($handle = fopen($file, 'a')) {
-    fwrite($handle, $temp);
+    fwrite($handle, $header);
+    foreach($data as $item) { //foreach element in $arr
+        $Red = $item[‘Red’];
+        $IR = $item[‘IR’];
+        $temp =  $Red.”, ".$IR."\n";
+        fwrite($handle, $temp);
+    }
     fclose($handle);
     echo "SUCCESS: Data written to file.";
 } else {
