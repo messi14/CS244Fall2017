@@ -13,7 +13,7 @@ String deviceName = "CS244";
 LIS3DH myIMU; //Default constructor is I2C, addr 0x19.
 
 // WiFi settings
-const char *ssid = "B585A6";
+const char *ssid = "*****";
 
 String serverEndPoint = "http://ec2-35-167-45-82.us-west-2.compute.amazonaws.com/server_acc_code.php";
 HTTPClient http;    //Declare object of class HTTPClient
@@ -36,7 +36,7 @@ void printMacAddress()
     Serial.print("Mac address : ");
     Serial.print(MAC_char);
 
-    WiFi.begin(ssid,"ajrocks@123");
+    WiFi.begin(ssid,"WifiName");
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
