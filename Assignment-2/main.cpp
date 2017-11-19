@@ -3,12 +3,16 @@
 #include "MAX30105.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <vector>
+#include <string>
+using namespace std;
 String deviceName = "CS244";
 
 // WiFi settings
-const char *ssid = "B585A6";
+const char *ssid = "26D-Comrades2.4";
+const char *password = "AisDhaDivHarNit26D";
 
-String serverEndPoint = "http://ec2-35-163-218-145.us-west-2.compute.amazonaws.com/test2.php";
+String serverEndPoint = "http://ec2-35-166-5-213.us-west-2.compute.amazonaws.com/server_RED_IR_code.php";
 HTTPClient http;    //Declare object of class HTTPClient
 
 MAX30105 particleSensor;
@@ -30,7 +34,7 @@ void printMacAddress()
     Serial.print("Mac address : ");
     Serial.print(MAC_char);
 
-    WiFi.begin(ssid,"******");
+    WiFi.begin(ssid,password);
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
@@ -104,7 +108,7 @@ String formJson(float r, float ir){
     
     result += "}";
 
-    Serial.println(result);
+    //Serial.println(result);
     jsonReadings.push_back(result);
 }
 
@@ -112,16 +116,15 @@ String formJson(float r, float ir){
 void loop()
 {
     if (WiFi.status() == WL_CONNECTED) {
-      if(samplesTaken == 100) {
+      if(samplesTaken == 50) {
         Serial.println("Done ");
         http.begin(serverEndPoint);  //Specify request destination
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         String request = combineJson();
+        //Serial.println(request);
         int httpCode = http.POST(request);   //Send the request
-        //String response = http.getString();      //Get the response payload
-        //Serial.println("Response : " + response);    //Print request response payload
-        http.end();  //Close connection
         samplesTaken=0;
+        jsonReadings.clear();
         return;
         }
         samplesTaken++;
@@ -129,6 +132,7 @@ void loop()
         uint32_t Red = particleSensor.getRed();
         uint32_t IR = particleSensor.getIR();
         formJson(Red, IR);
+
         } else {
         Serial.println("Error in WiFi connection");
     }
